@@ -1,0 +1,19 @@
+ Follow the documentation in the official Cloudsuite Data Caching Page to setup the Datacaching client and Datacaching server containers.
+    	"http://cloudsuite.ch//pages/benchmarks/datacaching/"
+
+1. To run these containers on different instances, you need to change the network configuration to 'host' network instead of using docker network as below:
+ 		$ docker run --name dc-server --net=host -d cloudsuite/data-caching:server -t 4 -m 4096 -n 550
+ 
+ 2. After the Docker containers for x86 Datacaching Client, x86 Datacaching Server and ARM Datacaching Server are setup, run the shell scrupt 'turn_off_cores.sh' to turn off the additional cores in x86 Server Instance to keep the cores configuration consistent with ARM Instance:
+   		$ ./turn_off_cores.sh
+ 
+ 3. Check the active cores on the instances using the below command to verify the configuration, it should show only 8 active cores for both x86 Server Instance and ARM Server Instance:
+		$ lscpu
+ 
+ 4. At this point all the docker containers are setup and warm up of the server is done using the client.
+ 
+ 5. Now to run the benchmark in the RPS range of [10000, 200000] place the 'run_script.sh' inside the x86 Datacaching client Container in the follow path '/usr/src/memcached/memcached_client/' and run the script to perform the benchmark.
+ 
+ 6. This script might have to be run several times to get consistent values.
+ 
+ 7. Collect the results from the console and use the 'DataCaching-LogsParser.py' script to parse the logs and  get the (RPS, Average Latency, 95th Percentile) information at each RPS value. These values can be used to generate the plots.

@@ -1,0 +1,20 @@
+ Follow the documentation in the official Cloudsuite Media Straming Page to setup the Media Streaming client, Media Streaming server and Dataset containers
+    	"http://cloudsuite.ch//pages/benchmarks/mediastreaming/"
+ 
+ 1. To run these containers on different instances, you need to change the network configuration to 'host' network instead of using docker network as below
+         $ docker run -d --name streaming_server --volumes-from streaming_dataset --net=host cloudsuite/media-streaming:server
+ 
+ 2. After the Docker containers  are setup, Run the shell script "turn_off_cores.sh" to turn off the additional cores in x86 Server Instance to keep the cores configuration consistent with ARM Server Instance
+   		$ ./turn_off_cores.sh
+ 
+ 3. Check the active cores on the instances using the below command to verify the configuration, it should show only 8 active cores for both x86 Server Instance and ARM Server Instance
+		$ lscpu
+ 
+ 4. Now to run the benchmark media streaming client container needs to be run, this script might have to be run several times to get consistent values.
+ 
+ 5. Collect the results from the console and use the 'MediaStreaming-LogsParser.py' script to parse the logs and  get the (Total Connections, Total Errors, Percentage Failure) information. These values can be used to generate the plots.
+
+ 6. To run the benchmark in Total Connections range of your choice, use the script 'launch_hunt_bin.sh' provided here, replace the script in Media Streaming client and rebuild the container.
+
+ 7. To vary the range of total connections, modify (lowLimSessions,hiLimSessions) in the script.
+
